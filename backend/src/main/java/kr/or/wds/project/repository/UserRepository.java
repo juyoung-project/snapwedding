@@ -5,11 +5,11 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import kr.or.wds.project.entity.MemberEntity;
+import kr.or.wds.project.entity.UserEntity;
 
 @Repository
-public interface MemberRepository extends JpaRepository<MemberEntity, Long> {
+public interface UserRepository extends JpaRepository<UserEntity, Long> {
 
-    Optional<MemberEntity> findByEmail(String email);
+    Optional<UserEntity> findByEmail(String email);
 
 }

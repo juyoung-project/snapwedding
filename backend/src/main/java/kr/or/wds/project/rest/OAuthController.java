@@ -19,8 +19,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import kr.or.wds.project.common.JwtTokenProvider;
 import kr.or.wds.project.dto.response.TokenResponseDto;
-import kr.or.wds.project.entity.MemberEntity;
-import kr.or.wds.project.repository.MemberRepository;
+import kr.or.wds.project.entity.UserEntity;
+import kr.or.wds.project.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -30,7 +30,7 @@ import lombok.RequiredArgsConstructor;
 public class OAuthController {
 
     private final JwtTokenProvider jwtTokenProvider;
-    private final MemberRepository memberRepository;
+    private final UserRepository userRepository;
 
     @Operation(summary = "OAuth 로그인 성공", description = "네이버 OAuth 로그인 성공 후 JWT 토큰 발급")
     @ApiResponses(value = {

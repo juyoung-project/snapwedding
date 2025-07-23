@@ -8,8 +8,8 @@ import lombok.Data;
 @AllArgsConstructor
 public class LoginRequest {
 
-    @Schema(description = "아이디")
-    private String id;
+    @Schema(description = "이메일")
+    private String email;
     @Schema(description = "비밀번호")
     private String password;
 }

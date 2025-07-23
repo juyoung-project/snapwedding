@@ -13,6 +13,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import kr.or.wds.project.dto.request.LoginRequest;
+import kr.or.wds.project.dto.request.SignUpRequest;
 import kr.or.wds.project.dto.response.LoginResponse;
 import kr.or.wds.project.dto.response.TokenResponseDto;
 import kr.or.wds.project.service.LoginService;
@@ -45,8 +46,8 @@ public class LoginController {
         @ApiResponse(responseCode = "400", description = "잘못된 요청")
     })
     @PostMapping("/signup")
-    public ResponseEntity<Void> signup() {
-        loginService.signup();
+    public ResponseEntity<Void> signup(@RequestBody SignUpRequest request) {
+        loginService.signup(request);
         return ResponseEntity.ok().build();
     }
 

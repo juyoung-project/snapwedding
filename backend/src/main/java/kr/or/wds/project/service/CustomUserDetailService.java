@@ -11,26 +11,27 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import kr.or.wds.project.entity.MemberEntity;
-import kr.or.wds.project.repository.MemberRepository;
+import kr.or.wds.project.common.UserRole;
+import kr.or.wds.project.entity.UserEntity;
+import kr.or.wds.project.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
 public class CustomUserDetailService implements UserDetailsService {
 
-    private final MemberRepository memberRepository;
+    private final UserRepository userRepository;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        MemberEntity member = memberRepository.findByEmail(username)
+        UserEntity member = userRepository.findByEmail(username)
             .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + username));
 
         GrantedAuthority authority = createAuthority(member.getRole());
         return new User(member.getEmail(), member.getPassword(), Collections.singletonList(authority));
     }
 
-    private GrantedAuthority createAuthority(String role) {
-        return new SimpleGrantedAuthority(role);
+    private GrantedAuthority createAuthority(UserRole role) {
+        return new SimpleGrantedAuthority(role.getValue());
     }
 }
