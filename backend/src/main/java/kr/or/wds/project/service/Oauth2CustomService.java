@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 
 import kr.or.wds.project.common.Oauth2Provider;
 import kr.or.wds.project.common.UserRole;
-import kr.or.wds.project.common.UserStatus;
+import kr.or.wds.project.common.Status;
 import kr.or.wds.project.entity.UserEntity;
 import kr.or.wds.project.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -71,7 +71,7 @@ public class Oauth2CustomService implements OAuth2UserService<OAuth2UserRequest,
 						.oauthId(memberEntity.getOauthId())
                         .password(UUID.randomUUID().toString()) // 임시 비밀번호
 						.role(UserRole.USER)
-                        .status(UserStatus.ACTIVE)
+                        .status(Status.ACTIVE)
                         .build();
                     userRepository.save(newMember);
                 }

@@ -81,7 +81,6 @@ CREATE TABLE experts (
   application_id BIGINT NOT NULL,
   service_type VARCHAR(20) NOT NULL,
   region_id BIGINT NOT NULL,
-  price INT NOT NULL,
   intro TEXT,
   portfolio_urls JSON,
   available_dates JSON,
@@ -95,93 +94,48 @@ CREATE TABLE experts (
   INDEX idx_user_id (user_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-CREATE TABLE payments (
-  id BIGINT AUTO_INCREMENT PRIMARY KEY,
-  booking_id BIGINT NOT NULL,
-  amount INT NOT NULL,
-  commission_amount INT NOT NULL,
-  payment_method ENUM('kakao', 'toss', 'naver', 'card') NOT NULL,
-  status ENUM('pending', 'paid', 'refunded', 'failed') DEFAULT 'pending',
-  paid_at TIMESTAMP NULL,
-  
-  -- 공통 컬럼
-  create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  update_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  create_user_id BIGINT,
-  update_user_id BIGINT,
-  del_yn CHAR(1) DEFAULT 'N',
-  
-  INDEX idx_booking_id (booking_id),
-  INDEX idx_status (status),
-  INDEX idx_paid_at (paid_at),
-  INDEX idx_del_yn (del_yn),
-  FOREIGN KEY (booking_id) REFERENCES bookings(id) ON DELETE CASCADE
+CREATE TABLE expert_products (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    product_nm VARCHAR(200) NOT NULL,
+    price DECIMAL(10,2) NOT NULL,
+    `order` INT DEFAULT 0, -- order는 MySQL 예약어라 백틱 필요
+    expert_id BIGINT NOT NULL,
+    product_type VARCHAR(50) NOT NULL,
+    status VARCHAR(20) DEFAULT 'active',
+    description TEXT,
+    duration_hours INT, -- 서비스 소요 시간 (예: 2시간, 4시간)
+    thumbnail_image VARCHAR(500),
+    detail_images JSON, -- 여러 이미지 URL 저장
+    is_featured CHAR(1) DEFAULT 'N', -- 추천 상품 여부
+    view_count INT DEFAULT 0, -- 조회수
+    booking_count INT DEFAULT 0, -- 예약 수
+    create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    update_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    create_user_id BIGINT,
+    update_user_id BIGINT,
+    del_yn CHAR(1) DEFAULT 'N',
+    INDEX idx_expert_id (expert_id),
+    INDEX idx_product_type (product_type),
+    INDEX idx_status (status),
+    INDEX idx_order (`order`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
-CREATE TABLE reviews (
-  id BIGINT AUTO_INCREMENT PRIMARY KEY,
-  booking_id BIGINT NOT NULL,
-  user_id BIGINT NOT NULL,
-  expert_id BIGINT NOT NULL,
-  rating TINYINT NOT NULL,
-  comment TEXT,
-  images JSON,
-  
-  -- 공통 컬럼
-  create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  update_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  create_user_id BIGINT,
-  update_user_id BIGINT,
-  del_yn CHAR(1) DEFAULT 'N',
-  
-  UNIQUE KEY unique_booking_review (booking_id),
-  INDEX idx_user_id (user_id),
-  INDEX idx_expert_id (expert_id),
-  INDEX idx_rating (rating),
-  INDEX idx_del_yn (del_yn),
-  FOREIGN KEY (booking_id) REFERENCES bookings(id) ON DELETE CASCADE,
-  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-  FOREIGN KEY (expert_id) REFERENCES experts(id) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
-
-CREATE TABLE invitations (
-  id BIGINT AUTO_INCREMENT PRIMARY KEY,
-  user_id BIGINT NOT NULL,
-  template VARCHAR(50) NOT NULL,
-  info JSON NOT NULL,
-  url VARCHAR(255) UNIQUE NOT NULL,
-  is_active BOOLEAN DEFAULT TRUE,
-  
-  -- 공통 컬럼
-  create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  update_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  create_user_id BIGINT,
-  update_user_id BIGINT,
-  del_yn CHAR(1) DEFAULT 'N',
-  
-  INDEX idx_user_id (user_id),
-  INDEX idx_url (url),
-  INDEX idx_is_active (is_active),
-  INDEX idx_del_yn (del_yn),
-  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
-
-CREATE TABLE albums (
-  id BIGINT AUTO_INCREMENT PRIMARY KEY,
-  invitation_id BIGINT NOT NULL,
-  media_urls JSON NOT NULL,
-  
-  -- 공통 컬럼
-  create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  update_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  create_user_id BIGINT,
-  update_user_id BIGINT,
-  del_yn CHAR(1) DEFAULT 'N',
-  
-  INDEX idx_invitation_id (invitation_id),
-  INDEX idx_del_yn (del_yn),
-  FOREIGN KEY (invitation_id) REFERENCES invitations(id) ON DELETE CASCADE
+CREATE TABLE expert_product_discounts (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    expert_product_id BIGINT NOT NULL,
+    discount_name VARCHAR(100) NOT NULL, -- "신규 가입 할인", "시즌 할인" 등
+    discount_type VARCHAR(20) NOT NULL,
+    discount_value VARCHAR(1000) , -- percentage면 10.00 (10%), fixed면 50000 (5만원)
+    min_price VARCHAR(1000) NULL, -- 최소 주문 금액 (할인 적용 조건)
+    max_discount_amount VARCHAR(1000) NULL, -- 최대 할인 금액 (percentage 할인 시)
+    start_date DATE NOT NULL,
+    end_date DATE NOT NULL,
+    status VARCHAR(20) DEFAULT 'active',
+    create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    update_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    create_user_id BIGINT,
+    update_user_id BIGINT,
+    del_yn CHAR(1) DEFAULT 'N',
+    INDEX idx_product_id (expert_product_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

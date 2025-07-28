@@ -1,15 +1,25 @@
 package kr.or.wds.project.entity;
 
-import jakarta.persistence.*;
-import lombok.*;
-
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import kr.or.wds.project.common.Oauth2Provider;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Index;
+import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
+import kr.or.wds.project.common.Status;
 import kr.or.wds.project.common.UserRole;
-import kr.or.wds.project.common.UserStatus;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "users",
@@ -72,7 +82,7 @@ public class UserEntity extends BaseEntity {
     @Enumerated(EnumType.STRING)
     @Column(length = 20, nullable = false)
     @Schema(description = "회원 상태")
-    private UserStatus status = UserStatus.ACTIVE;
+    private Status status = Status.ACTIVE;
 
     @Enumerated(EnumType.STRING)
     @Column(length = 20, nullable = false)

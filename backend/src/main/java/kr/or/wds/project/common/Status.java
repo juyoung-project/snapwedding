@@ -1,13 +1,13 @@
 package kr.or.wds.project.common;
 
-public enum UserStatus {
+public enum Status {
     ACTIVE("active"),
     INACTIVE("inactive"),
     SUSPENDED("suspended");
 
     private final String value;
 
-    UserStatus(String value) {
+    Status(String value) {
         this.value = value;
     }
 

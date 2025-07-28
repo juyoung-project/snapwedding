@@ -69,8 +69,9 @@ public class SecurityConfig {
                                 "/api/auth/**",
                                 "/oauth2/**",
                                 "/login/**",
-                                "/api/applications/**",
-                                "/api/oauth/**"
+                                "/api/applications/**", 
+                                "/api/oauth/**",
+                                "/api/expert-products/**"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
