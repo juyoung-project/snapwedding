@@ -1,9 +1,10 @@
 package kr.or.wds.project.common;
 
+
+
 public enum Status {
     ACTIVE("active"),
-    INACTIVE("inactive"),
-    SUSPENDED("suspended");
+    INACTIVE("inactive");
 
     private final String value;
 

@@ -11,6 +11,7 @@ public enum ExceptionType {
     BAD_REQUEST(HttpStatus.BAD_REQUEST, "잘못된 요청입니다."),
     INVALID_REFRESH_TOKEN(HttpStatus.BAD_REQUEST, "유효하지 않은 리프레시 토큰입니다."),
     INVALID_TOKEN_SUBJECT(HttpStatus.BAD_REQUEST, "토큰의 사용자 정보가 일치하지 않습니다."),
+    INVALID_DAY_OF_WEEK(HttpStatus.BAD_REQUEST, "이미 존재하는 요일입니다."),
     // 403 Forbidden
     FORBIDDEN(HttpStatus.FORBIDDEN, "권한이 없습니다."),
 

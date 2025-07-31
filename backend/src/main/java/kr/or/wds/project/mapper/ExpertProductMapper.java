@@ -18,7 +18,6 @@ public class ExpertProductMapper {
                 .price(request.getPrice())
                 .order(request.getOrder())
                 .productType(request.getProductType())
-                .status(Status.ACTIVE)
                 .description(request.getDescription())
                 .durationHours(request.getDurationHours())
                 .build();

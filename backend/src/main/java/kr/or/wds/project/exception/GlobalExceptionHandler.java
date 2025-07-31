@@ -12,9 +12,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    /*
-     * Custom Exception
-     */
     @ExceptionHandler(CustomException.class)
     protected ResponseEntity<ExceptionResponse> handleException(final CustomException e) {
 
