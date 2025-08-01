@@ -6,7 +6,7 @@ import kr.or.wds.project.dto.request.ExpertProductRequest;
 import kr.or.wds.project.dto.request.ExpertProductDiscountRequest;
 import kr.or.wds.project.entity.ExpertProductDiscountEntity;
 import kr.or.wds.project.entity.ExpertProductEntity;
-import kr.or.wds.project.common.Status;
+import kr.or.wds.project.common.enums.Status;
 
 @Component
 public class ExpertProductMapper {

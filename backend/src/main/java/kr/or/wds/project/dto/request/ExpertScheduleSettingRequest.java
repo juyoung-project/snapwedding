@@ -5,7 +5,7 @@ import java.util.Map;
 import jakarta.validation.constraints.NotNull;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
-import kr.or.wds.project.common.Day;
+import kr.or.wds.project.common.enums.Day;
 
 @Data
 public class ExpertScheduleSettingRequest {

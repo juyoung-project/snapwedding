@@ -2,8 +2,8 @@ package kr.or.wds.project.mapper;
 
 import org.springframework.stereotype.Component;
 
-import kr.or.wds.project.common.Day;
-import kr.or.wds.project.common.Status;
+import kr.or.wds.project.common.enums.Day;
+import kr.or.wds.project.common.enums.Status;
 import kr.or.wds.project.dto.request.ExpertScheduleSettingRequest;
 import kr.or.wds.project.entity.ExpertEntity;
 import kr.or.wds.project.entity.ExpertScheduleSettingEntity;

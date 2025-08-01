@@ -17,6 +17,8 @@ public enum ExceptionType {
 
     // 404 Not Found
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "사용자를 찾을 수 없습니다."),
+    EXPERT_NOT_FOUND(HttpStatus.NOT_FOUND, "전문가를 찾을 수 없습니다."),
+    EXPERT_PRODUCT_NOT_FOUND(HttpStatus.NOT_FOUND, "상품을 찾을 수 없습니다."), 
     DATA_NOT_FOUND(HttpStatus.NOT_FOUND, "조회된 데이터가 없습니다."),
     FILE_NOT_FOUND(HttpStatus.NOT_FOUND, "조회된 파일이 없습니다."),
     REFRESH_TOKEN_NOT_FOUND(HttpStatus.NOT_FOUND, "리프레시 토큰을 찾을 수 없습니다."),

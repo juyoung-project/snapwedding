@@ -1,6 +1,6 @@
 package kr.or.wds.project.dto.request;
 
-import kr.or.wds.project.common.ServiceType;
+import kr.or.wds.project.common.enums.ServiceType;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;

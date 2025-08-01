@@ -7,8 +7,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import kr.or.wds.project.dto.request.SignUpRequest;
 import kr.or.wds.project.entity.UserEntity;
-import kr.or.wds.project.common.UserRole;
-import kr.or.wds.project.common.Status;
+import kr.or.wds.project.common.enums.UserRole;
+import kr.or.wds.project.common.enums.Status;
 import lombok.RequiredArgsConstructor;
 
 @Component

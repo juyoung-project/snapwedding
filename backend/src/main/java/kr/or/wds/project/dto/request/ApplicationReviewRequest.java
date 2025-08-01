@@ -1,6 +1,6 @@
 package kr.or.wds.project.dto.request;
 
-import kr.or.wds.project.common.ApproveStatus;
+import kr.or.wds.project.common.enums.ApproveStatus;
 import jakarta.validation.constraints.NotNull;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;

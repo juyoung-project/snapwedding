@@ -2,8 +2,8 @@ package kr.or.wds.project.entity;
 
 import java.time.LocalDateTime;
 
-import kr.or.wds.project.common.ApproveStatus;
-import kr.or.wds.project.common.ServiceType;
+import kr.or.wds.project.common.enums.ApproveStatus;
+import kr.or.wds.project.common.enums.ServiceType;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

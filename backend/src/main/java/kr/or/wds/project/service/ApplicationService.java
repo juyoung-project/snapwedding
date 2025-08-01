@@ -4,7 +4,7 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
-import kr.or.wds.project.common.ApproveStatus;
+import kr.or.wds.project.common.enums.ApproveStatus;
 import kr.or.wds.project.dto.request.ApplicationRequest;
 import kr.or.wds.project.dto.request.ApplicationReviewRequest;
 import kr.or.wds.project.mapper.ApplicationMapper;

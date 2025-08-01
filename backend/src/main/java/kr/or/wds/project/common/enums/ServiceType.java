@@ -1,5 +1,10 @@
-package kr.or.wds.project.common;
+package kr.or.wds.project.common.enums;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+@Getter
+@AllArgsConstructor
 public enum ServiceType {
     SNAP_EXPERT("snap_expert"),
     MC_EXPERT("mc_expert"),
@@ -8,11 +13,4 @@ public enum ServiceType {
 
     private final String value;
 
-    ServiceType(String value) {
-        this.value = value;
-    }
-
-    public String getValue() {
-        return value;
-    }
 }

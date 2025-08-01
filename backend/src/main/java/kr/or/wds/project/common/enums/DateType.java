@@ -1,4 +1,4 @@
-package kr.or.wds.project.common;
+package kr.or.wds.project.common.enums;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -3,7 +3,6 @@ package kr.or.wds.project.service;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -16,8 +15,8 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
 import kr.or.wds.project.common.Oauth2Provider;
-import kr.or.wds.project.common.UserRole;
-import kr.or.wds.project.common.Status;
+import kr.or.wds.project.common.enums.Status;
+import kr.or.wds.project.common.enums.UserRole;
 import kr.or.wds.project.entity.UserEntity;
 import kr.or.wds.project.repository.UserRepository;
 import lombok.RequiredArgsConstructor;

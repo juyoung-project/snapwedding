@@ -9,7 +9,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import kr.or.wds.project.common.Status;
+import kr.or.wds.project.common.enums.Status;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
