@@ -17,3 +17,20 @@ INSERT INTO regions (name, parent_id, level) VALUES
 ('경상북도', NULL, 1),
 ('경상남도', NULL, 1),
 ('제주특별자치도', NULL, 1);
+
+
+
+
+
+
+
+INSERT INTO portfolio_categories 
+(category_name, category_code, parent_id, depth, description, display_order, is_required, status) 
+VALUES 
+-- 기본적인 웨딩 서비스 카테고리
+('스냅촬영', 'SNAP', NULL, 1, '웨딩 스냅 촬영 서비스', 1, 'Y', 'ACTIVE'),
+('본식영상', 'VIDEO', NULL, 1, '본식 웨딩 영상 서비스', 2, 'Y', 'ACTIVE'),
+('본식스냅', 'CEREMONY_SNAP', NULL, 1, '본식 스냅 촬영 서비스', 3, 'Y', 'ACTIVE'),
+('드론촬영', 'DRONE', NULL, 1, '드론 촬영 서비스', 4, 'N', 'ACTIVE'),
+('축가', 'SONG', NULL, 1, '웨딩 축가 서비스', 5, 'N', 'ACTIVE'),
+('사회자', 'MC', NULL, 1, '웨딩 사회자 서비스', 6, 'N', 'ACTIVE');

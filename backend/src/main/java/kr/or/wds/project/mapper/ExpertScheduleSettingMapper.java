@@ -26,10 +26,10 @@ public class ExpertScheduleSettingMapper {
     }
 
     public ExpertScheduleSettingEntity toEntity(ExpertScheduleSettingRequest request) {
-        System.out.println("request: " + request);
+        
         ExpertEntity expert = expertRepository.findById(request.getExpertId())
                 .orElseThrow(() -> new CustomException(ExceptionType.DATA_NOT_FOUND));
-        System.out.println("expert: " + expert);
+
         if (isValidDayOfWeek(expert, request.getDayOfWeek())) {
             throw new CustomException(ExceptionType.INVALID_DAY_OF_WEEK);
         }

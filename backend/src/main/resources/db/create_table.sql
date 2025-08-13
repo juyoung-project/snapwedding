@@ -204,3 +204,72 @@ CREATE TABLE bookings (
     INDEX idx_applied_at (applied_at),
     INDEX idx_confirmed_at (confirmed_at)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
+
+CREATE TABLE portfolio_categories ( -- 관리자용 카테고리 테이블 
+    id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '카테고리 고유 ID',
+    category_name VARCHAR(100) NOT NULL COMMENT '카테고리 표시명 (예: 웨딩촬영, 본식스냅)',
+    category_code VARCHAR(50) NOT NULL COMMENT '시스템용 카테고리 코드 (예: WEDDING_PHOTO)',
+    parent_id BIGINT NULL COMMENT '상위 카테고리 ID (최상위는 NULL)',
+    depth INT DEFAULT 1 COMMENT '카테고리 깊이 (1: 대분류, 2: 중분류, 3: 소분류)',
+    description TEXT COMMENT '카테고리 설명',
+    icon_url VARCHAR(500) NULL COMMENT '카테고리 아이콘 이미지 URL',
+    display_order INT DEFAULT 0 COMMENT '화면 표시 순서',
+    is_required CHAR(1) DEFAULT 'N' COMMENT '전문가 필수 등록 카테고리 여부 (Y/N)',
+    status VARCHAR(20) DEFAULT 'ACTIVE' COMMENT '카테고리 상태 (ACTIVE/INACTIVE)',
+    create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT '생성일시',
+    update_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '수정일시',
+    create_user_id BIGINT COMMENT '생성자 ID',
+    update_user_id BIGINT COMMENT '수정자 ID',
+    del_yn CHAR(1) DEFAULT 'N' COMMENT '삭제여부 (Y/N)',
+    UNIQUE KEY unique_category_code (category_code),
+    INDEX idx_parent_id (parent_id),
+    INDEX idx_display_order (display_order),
+    INDEX idx_status (status)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='포트폴리오 카테고리 마스터';
+
+
+
+CREATE TABLE portfolios (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '포트폴리오 고유 ID',
+    user_id BIGINT NOT NULL COMMENT '작성자 ID',
+    expert_id BIGINT NOT NULL COMMENT '전문가 ID',
+    category_id BIGINT NOT NULL COMMENT '카테고리 ID',
+    title VARCHAR(2000) NOT NULL COMMENT '포트폴리오 제목',
+    description TEXT COMMENT '포트폴리오 설명',
+    tags JSON COMMENT '검색용 태그 (JSON 배열)',
+    thumbnail_url VARCHAR(500) COMMENT '대표 이미지 URL',
+    display_order INT DEFAULT 0 COMMENT '전시 순서',
+    is_featured CHAR(1) DEFAULT 'N' COMMENT '대표작품 여부 (Y/N)',
+    is_public CHAR(1) DEFAULT 'Y' COMMENT '공개여부 (Y/N)',
+    shooting_date DATE COMMENT '촬영일자',
+    region_id BIGINT COMMENT '촬영지역 ID',
+    view_count INT DEFAULT 0 COMMENT '조회수',
+    like_count INT DEFAULT 0 COMMENT '좋아요 수',
+    save_count INT DEFAULT 0 COMMENT '저장 수',
+    status VARCHAR(20) DEFAULT 'DRAFT' COMMENT '상태 (DRAFT/PUBLISHED/HIDDEN)',
+    create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT '생성일시',
+    update_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '수정일시',
+    create_user_id BIGINT COMMENT '생성자 ID',
+    update_user_id BIGINT COMMENT '수정자 ID',
+    del_yn CHAR(1) DEFAULT 'N' COMMENT '삭제여부 (Y/N)',
+    INDEX idx_user_id (user_id),
+    INDEX idx_expert_id (expert_id),
+    INDEX idx_category_id (category_id),
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='포트폴리오 메인';
+
+CREATE TABLE portfolio_regions (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    portfolio_id BIGINT NOT NULL,
+    region_id BIGINT NOT NULL,
+    is_primary CHAR(1) DEFAULT 'N',
+    display_order INT DEFAULT 0,
+    create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    update_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    create_user_id BIGINT,
+    update_user_id BIGINT,
+    del_yn CHAR(1) DEFAULT 'N',
+    INDEX idx_portfolio_id (portfolio_id),
+    INDEX idx_region_id (region_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

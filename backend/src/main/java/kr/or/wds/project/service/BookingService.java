@@ -3,7 +3,6 @@ package kr.or.wds.project.service;
 import org.springframework.stereotype.Service;
 
 import kr.or.wds.project.dto.request.BookingCustomerRequest;
-import kr.or.wds.project.dto.request.BookingRequest;
 import kr.or.wds.project.entity.BookingEntity;
 import kr.or.wds.project.mapper.BookingMapper;
 import kr.or.wds.project.repository.BookingRepository;

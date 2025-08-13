@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import kr.or.wds.project.dto.request.BookingCustomerRequest;
-import kr.or.wds.project.dto.request.BookingRequest;
 import kr.or.wds.project.entity.BookingEntity;
 import kr.or.wds.project.service.BookingService;
 import lombok.RequiredArgsConstructor;
