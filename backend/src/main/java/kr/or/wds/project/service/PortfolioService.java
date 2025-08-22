@@ -2,6 +2,9 @@ package kr.or.wds.project.service;
 
 import java.util.List;
 
+import kr.or.wds.project.common.enums.FileUploadDomainType;
+import kr.or.wds.project.common.records.FileAfterContext;
+import kr.or.wds.project.helper.UploadAfterProcessor;
 import org.springframework.stereotype.Service;
 
 import kr.or.wds.project.dto.request.PortfoliosRequest;
@@ -14,7 +17,7 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class PortfolioService {
+public class PortfolioService implements UploadAfterProcessor {
 
     private final PortfolioRepository portfolioRepository;
     private final PortfolioMapper portfolioMapper;
@@ -34,4 +37,14 @@ public class PortfolioService {
         return portfolioRepository.findAll();
     }
 
+    @Override
+    public boolean supports(FileUploadDomainType domain) {
+        return true;
+    }
+
+    @Override
+    public String process(FileAfterContext context) {
+        System.out.println(context.fileIds());
+        return "";
+    }
 }
