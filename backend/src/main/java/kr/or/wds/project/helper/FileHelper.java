@@ -10,7 +10,6 @@ import kr.or.wds.project.exception.ExceptionType;
 import kr.or.wds.project.properties.FileStorageProperties;
 import kr.or.wds.project.repository.FileMasterRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
@@ -32,9 +31,6 @@ public class FileHelper {
     private final List<UploadAfterProcessor> processors;
     private final List<FileStorageHelperIf> storageAdapters; // 모든 구현체가 자동 주입
     private final FileStorageProperties storageProperties;   // 설정값 주입
-
-    @Value("${file.storage.path}")
-    private String storagePath;
 
     @Transactional
     public List<Long> upload(FileUploadDomainType domain,
@@ -99,7 +95,7 @@ public class FileHelper {
     }
 
     private Resource getResource(String path, String storeFileNm) {
-        Path filePath = Paths.get(storagePath)
+        Path filePath = Paths.get(storageProperties.getPath())
                 .resolve(path)
                 .resolve(storeFileNm);
         Resource resource = new FileSystemResource(filePath.toFile());
