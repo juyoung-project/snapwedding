@@ -31,8 +31,7 @@ export function LoginForm({ className, ...props }: React.ComponentProps<'div'>) 
     },
   });
 
-  const naverUrl = process.env.NEXT_PUBLIC_NAVER_LOGIN_URL;
-
+  const naverUrl = process.env.NEXT_PUBLIC_NAVER_OAUTH_URL;
   const handleKakaoLogin = () => {};
 
   const handleLogin = async () => {
