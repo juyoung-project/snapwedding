@@ -106,13 +106,14 @@ CREATE TABLE expert_products
     price           DECIMAL(10, 2) NOT NULL,
     `order`         INT         DEFAULT 0,   -- order는 MySQL 예약어라 백틱 필요
     expert_id       BIGINT         NOT NULL,
+    thumbnail_file_id  BIGINT,
     product_type    VARCHAR(50)    NOT NULL,
     status          VARCHAR(20) DEFAULT 'ACTIVE',
     description     TEXT,
     duration_hours  INT,                     -- 서비스 소요 시간 (예: 2시간, 4시간)
-    thumbnail_image VARCHAR(500),
-    detail_images   JSON,                    -- 여러 이미지 URL 저장
-    is_featured     CHAR(1)     DEFAULT 'N', -- 추천 상품 여부
+    badge VARCHAR(20) ,
+    use_yn     CHAR(1)     DEFAULT 'N', -- 사용여부
+    posting_yn     CHAR(1)  , -- 게시여부
     view_count      INT         DEFAULT 0,   -- 조회수
     booking_count   INT         DEFAULT 0,   -- 예약 수
     create_time     TIMESTAMP   DEFAULT CURRENT_TIMESTAMP,

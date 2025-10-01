@@ -39,7 +39,7 @@ public class PortfolioService implements UploadAfterProcessor {
 
     @Override
     public boolean supports(FileUploadDomainType domain) {
-        return true;
+        return domain.equals(FileUploadDomainType.PORTFOLIO);
     }
 
     @Override

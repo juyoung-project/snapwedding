@@ -34,9 +34,9 @@ public class FileHelper {
 
     @Transactional
     public List<Long> upload(FileUploadDomainType domain,
-                         List<MultipartFile> fileList,
-                         Long aggregateId,
-                         Long uploadUserId
+                             List<MultipartFile> fileList,
+                             Long aggregateId,
+                             Long uploadUserId
     ) {
         // 1) 파일 저장
         var provider = storageProperties.getProvider();
@@ -59,23 +59,18 @@ public class FileHelper {
         }
 
         var ctx = new FileAfterContext(domain, aggregateId, fileId, uploadUserId);
-
-        TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
-            @Override
-            public void afterCommit() {
-                // 각 도메인의 프로세서 실행
-                processors.stream()
-                        .filter(p -> p.supports(domain))
-                        .forEach(p -> {
-                            try {
-                                p.process(ctx);
-                            } catch (Exception ex) {
-                                // 실패 정책: 로깅 후 계속 or 알림/재시도 큐 적재
-                                // 필요 시 실패 전파: throw new RuntimeException(ex);
-                            }
-                        });
-            }
-        });
+        processors.stream()
+                .filter(p -> p.supports(domain))
+                .forEach(p -> {
+                    try {
+                        p.process(ctx);
+                        ;
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                        // 실패 정책: 로깅 후 계속 or 알림/재시도 큐 적재
+                        // 필요 시 실패 전파: throw new RuntimeException(ex);
+                    }
+                });
         return fileId;
     }
 

@@ -18,8 +18,12 @@ public class ExpertProductMapper {
                 .price(request.getPrice())
                 .order(request.getOrder())
                 .productType(request.getProductType())
+                .useYn(request.getUseYn())
+                .postingYn(request.getPostingYn())
+                .badge(request.getBadge())
                 .description(request.getDescription())
                 .durationHours(request.getDurationHours())
+                .status(Status.ACTIVE)
                 .build();
     }   
 

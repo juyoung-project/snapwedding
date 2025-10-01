@@ -1,5 +1,15 @@
 package kr.or.wds.project.service;
 
+import jakarta.transaction.Transactional;
+import kr.or.wds.project.common.enums.FileUploadDomainType;
+import kr.or.wds.project.common.records.FileAfterContext;
+import kr.or.wds.project.dto.request.ExpertProductOrderRequest;
+import kr.or.wds.project.dto.response.ExpertProductResponse;
+import kr.or.wds.project.exception.CustomException;
+import kr.or.wds.project.exception.ExceptionType;
+import kr.or.wds.project.helper.FileHelper;
+import kr.or.wds.project.helper.UploadAfterProcessor;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import kr.or.wds.project.dto.request.ExpertProductRequest;
@@ -11,23 +21,87 @@ import kr.or.wds.project.repository.ExpertProductDiscountRepository;
 import kr.or.wds.project.repository.ExpertProductRepository;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
-public class ExpertProductService {
+public class ExpertProductService implements UploadAfterProcessor {
 
     private final ExpertProductRepository expertProductRepository;
     private final ExpertProductMapper expertProductMapper;
     private final ExpertProductDiscountRepository expertProductDiscountRepository;
+    private final FileHelper fileHelper;
 
-    public ExpertProductEntity createExpertProduct(ExpertProductRequest request) {
+    public ExpertProductService(
+            ExpertProductRepository expertProductRepository,
+            ExpertProductMapper expertProductMapper,
+            ExpertProductDiscountRepository expertProductDiscountRepository,
+            @Lazy FileHelper fileHelper
+    ) {
+        this.expertProductRepository = expertProductRepository;
+        this.expertProductMapper = expertProductMapper;
+        this.expertProductDiscountRepository = expertProductDiscountRepository;
+        this.fileHelper = fileHelper;
+    }
+
+    @Transactional
+    public void createExpertProduct(ExpertProductRequest request, MultipartFile file) {
         ExpertProductEntity expertProduct = expertProductMapper.toEntity(request);
-        return expertProductRepository.save(expertProduct);
+        expertProductRepository.save(expertProduct);
+        List<MultipartFile> files = List.of(file);
+        fileHelper.upload(FileUploadDomainType.PRODUCT, files, expertProduct.getId(), expertProduct.getExpertId());
+
     }
 
     public ExpertProductDiscountEntity createExpertProductDiscount(ExpertProductDiscountRequest request) {
         ExpertProductDiscountEntity expertProductDiscount = expertProductMapper.toDiscountEntity(request);
         return expertProductDiscountRepository.save(expertProductDiscount);
+    }
+
+    public List<ExpertProductResponse> getList() {
+        return ExpertProductResponse.from(expertProductRepository.findAllByOrderByOrderAsc());
+    }
+
+    public void updateOrder(List<ExpertProductOrderRequest> orders
+    ) {
+        List<Long> ids = orders.stream().map(ExpertProductOrderRequest::getId).toList();
+        List<ExpertProductEntity> entities = expertProductRepository.findAllById(ids);
+
+        Map<Long, Integer> orderMap = orders.stream()
+                .collect(Collectors.toMap(
+                        ExpertProductOrderRequest::getId,
+                        ExpertProductOrderRequest::getOrder
+                ));
+
+        entities.forEach(entity -> {
+            Integer newOrder = orderMap.get(entity.getId());
+            if (newOrder != null) {
+                entity.setOrder(newOrder);
+            }
+        });
+
+        expertProductRepository.saveAll(entities);
+
+    }
+
+    @Override
+    public boolean supports(FileUploadDomainType domain) {
+        return FileUploadDomainType.PRODUCT == domain;
+    }
+
+    @Override
+    @Transactional
+    public String process(FileAfterContext context) {
+        ExpertProductEntity expertProduct = expertProductRepository.findById(context.aggregateId())
+                .orElseThrow(() -> new CustomException(ExceptionType.DATA_NOT_FOUND));
+
+        expertProduct.setThumbnailFileId(context.fileIds().get(0));
+        expertProductRepository.save(expertProduct);
+        // save() 호출 또는 변경 감지(Dirty Checking)로 UPDATE 실행됨
+        return "Product thumbnail updated: " + expertProduct.getId();
     }
 
 }

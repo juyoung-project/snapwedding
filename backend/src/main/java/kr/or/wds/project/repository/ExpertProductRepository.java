@@ -4,6 +4,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import kr.or.wds.project.entity.ExpertProductEntity;
 
-public interface ExpertProductRepository extends JpaRepository<ExpertProductEntity, Long> {
+import java.util.List;
 
+public interface ExpertProductRepository extends JpaRepository<ExpertProductEntity, Long> {
+    List<ExpertProductEntity> findAllByOrderByOrderAsc();
+
+    //Page<ExpertProductResponse> selectAllPage(org.springframework.data.domain.Pageable pageable);
 }

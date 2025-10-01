@@ -10,14 +10,12 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import kr.or.wds.project.common.enums.Status;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Table(name = "expert_products")
 @Getter
+@Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -30,6 +28,10 @@ public class ExpertProductEntity extends BaseEntity {
     @Column(name = "expert_id")
     @Schema(description = "전문가 ID")
     private Long expertId;
+
+    @Column(name = "thumbnail_file_id")
+    @Schema(description = "썸네일 파일 ID")
+    private Long thumbnailFileId;
 
     @Column(name = "product_nm")
     @Schema(description = "상품명")
@@ -60,17 +62,17 @@ public class ExpertProductEntity extends BaseEntity {
     @Schema(description = "서비스 소요 시간")
     private Integer durationHours;
 
-    @Column(name = "thumbnail_image")
-    @Schema(description = "썸네일 이미지")
-    private String thumbnailImage;
+    @Column(name = "use_yn")
+    @Schema(description = "사용여부")
+    private String useYn;
 
-    @Column(name = "detail_images")
-    @Schema(description = "상세 이미지")
-    private String detailImages;
+    @Column(name = "posting_yn")
+    @Schema(description = "게시여부")
+    private String postingYn;
 
-    @Column(name = "is_featured")
-    @Schema(description = "추천 상품 여부")
-    private String isFeatured;
+    @Column(name = "badge")
+    @Schema(description = "뱃지명")
+    private String badge;
 
     @Column(name = "view_count")
     @Schema(description = "조회수")

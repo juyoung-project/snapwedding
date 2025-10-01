@@ -27,6 +27,15 @@ export const apiDelete = async <T = unknown>(url: string, data: unknown = {}): P
   return instance.delete<T>(url, { data });
 };
 
+export const apiUpload = async <T = unknown>(url: string, formData: FormData): Promise<AxiosResponse<T>> => {
+  url = `${process.env.NEXT_PUBLIC_API_URL}${url}`;
+  return instance.post<T>(url, formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
+};
+
 export const apiClientGet = async <T = unknown>(
   url: string,
   params: Record<string, unknown> = {},
@@ -46,7 +55,7 @@ export const apiClientDelete = async <T = unknown>(url: string, data: unknown = 
   return instance.delete<T>(url, { data });
 };
 
-export const apiUpload = async <T = unknown>(url: string, formData: FormData): Promise<AxiosResponse<T>> => {
+export const apiClientUpload = async <T = unknown>(url: string, formData: FormData): Promise<AxiosResponse<T>> => {
   return instance.post<T>(url, formData, {
     headers: {
       'Content-Type': 'multipart/form-data',

@@ -12,7 +12,7 @@ export const applyInterceptors = (inst: AxiosInstance) => {
   );
 
   inst.interceptors.response.use(
-    (response: AxiosResponse) => response?.data,
+    (response: AxiosResponse) => response,
     async (error) => {
       const originalRequest = error.config as unknown as InternalAxiosRequestConfig;
       const status = error.response?.status as number | undefined;

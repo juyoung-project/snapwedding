@@ -27,7 +27,18 @@ public class ExpertProductRequest {
     @NotNull(message = "productType is required")
     @Schema(description = "상품 타입")
     private String productType;
-    private Status status;
+
+    @NotNull(message = "useYn is required")
+    @Schema(description = "사용 여부")
+    private String useYn;
+
+    @NotNull(message = "postingYn is required")
+    @Schema(description = "게시 여부")
+    private String postingYn;
+
+    @NotNull(message = "badge is required")
+    @Schema(description = "뱃지 명")
+    private String badge;
 
     @NotNull(message = "description is required")
     @Schema(description = "설명")
