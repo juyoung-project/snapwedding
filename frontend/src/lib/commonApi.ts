@@ -36,6 +36,15 @@ export const apiUpload = async <T = unknown>(url: string, formData: FormData): P
   });
 };
 
+export const apiPutUpload = async <T = unknown>(url: string, formData: FormData): Promise<AxiosResponse<T>> => {
+  url = `${process.env.NEXT_PUBLIC_API_URL}${url}`;
+  return instance.put<T>(url, formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
+};
+
 export const apiClientGet = async <T = unknown>(
   url: string,
   params: Record<string, unknown> = {},
@@ -57,6 +66,14 @@ export const apiClientDelete = async <T = unknown>(url: string, data: unknown = 
 
 export const apiClientUpload = async <T = unknown>(url: string, formData: FormData): Promise<AxiosResponse<T>> => {
   return instance.post<T>(url, formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
+};
+
+export const apiClientPutUpload = async <T = unknown>(url: string, formData: FormData): Promise<AxiosResponse<T>> => {
+  return instance.put<T>(url, formData, {
     headers: {
       'Content-Type': 'multipart/form-data',
     },

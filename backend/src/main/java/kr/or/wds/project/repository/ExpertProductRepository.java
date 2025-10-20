@@ -7,7 +7,7 @@ import kr.or.wds.project.entity.ExpertProductEntity;
 import java.util.List;
 
 public interface ExpertProductRepository extends JpaRepository<ExpertProductEntity, Long> {
-    List<ExpertProductEntity> findAllByOrderByOrderAsc();
+    List<ExpertProductEntity> findAllByDelYnOrderByOrderAsc(String delYn);
 
     //Page<ExpertProductResponse> selectAllPage(org.springframework.data.domain.Pageable pageable);
 }

@@ -1,32 +1,24 @@
 'use client';
 
 import Image from 'next/image';
-import { useMemo, useRef, useState } from 'react';
+import { useMemo } from 'react';
 import { closestCenter, DndContext, DragEndEvent, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
 import { arrayMove, rectSortingStrategy, SortableContext, useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { IconPlus } from '@tabler/icons-react';
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Textarea } from '@/components/ui/textarea';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { ProductDto, ProductOrderDto, ProductSaveDto } from '@/types/domain/product';
+import { ProductDto, ProductOrderDto } from '@/types/domain/product';
 
 type ProductGridSortableProps = {
   products: ProductDto[];
   onReorder: (next: ProductDto[], orderList: ProductOrderDto[]) => void;
-  onOpen?: (id: string | number) => void;
-  onAdd: (data: ProductSaveDto) => void;
+  onOpen: (id: string | number) => void;
+  onAddClick: () => void; // onAdd에서 onAddClick으로 변경
 };
 
-export function ProductGridSortable({ products, onReorder, onOpen, onAdd }: ProductGridSortableProps) {
-  const [open, setOpen] = useState(false);
-
+export function ProductGridSortable({ products, onReorder, onOpen, onAddClick }: ProductGridSortableProps) {
   const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 6 } }));
 
   const ids = useMemo(() => products.map((p) => p.id), [products]);
@@ -69,35 +61,19 @@ export function ProductGridSortable({ products, onReorder, onOpen, onAdd }: Prod
         </SortableContext>
       </DndContext>
 
-      {/* 항상 마지막에 오는 추가(+) 카드: 드래그 불가 */}
-      <Dialog open={open} onOpenChange={setOpen}>
-        <DialogTrigger asChild>
-          <Card
-            role="button"
-            aria-label="제품 추가"
-            className="flex min-h-[220px] items-center justify-center rounded-xl border-2 border-dashed border-muted-foreground/30 bg-muted/20 p-4 text-muted-foreground transition-colors hover:border-muted-foreground/60 hover:bg-muted/30"
-          >
-            <CardContent className="flex flex-col items-center justify-center gap-2 p-0">
-              <IconPlus className="size-7 opacity-80" />
-              <div className="text-sm font-medium">제품 추가</div>
-              <div className="text-xs text-muted-foreground/80">새 제품을 빠르게 등록하세요</div>
-            </CardContent>
-          </Card>
-        </DialogTrigger>
-
-        <DialogContent className="w-full sm:max-w-xl">
-          <DialogHeader>
-            <DialogTitle>새 제품 추가</DialogTitle>
-          </DialogHeader>
-          <AddProductForm
-            onCancel={() => setOpen(false)}
-            onSubmit={(data: ProductSaveDto) => {
-              onAdd(data);
-              setOpen(false);
-            }}
-          />
-        </DialogContent>
-      </Dialog>
+      {/* "제품 추가" 카드는 이제 onAddClick 핸들러를 호출합니다. */}
+      <Card
+        role="button"
+        aria-label="제품 추가"
+        onClick={onAddClick}
+        className="flex min-h-[220px] items-center justify-center rounded-xl border-2 border-dashed border-muted-foreground/30 bg-muted/20 p-4 text-muted-foreground transition-colors hover:border-muted-foreground/60 hover:bg-muted/30"
+      >
+        <CardContent className="flex flex-col items-center justify-center gap-2 p-0">
+          <IconPlus className="size-7 opacity-80" />
+          <div className="text-sm font-medium">제품 추가</div>
+          <div className="text-xs text-muted-foreground/80">새 제품을 빠르게 등록하세요</div>
+        </CardContent>
+      </Card>
     </div>
   );
 }
@@ -143,7 +119,6 @@ function SortableProductCard({ product, onOpen }: { product: ProductDto; onOpen?
           </CardDescription>
         </CardHeader>
 
-        {/* 카드 전체 클릭으로 상세 열고 싶다면 아래 버튼/영역 추가 */}
         <CardContent className="pt-0">
           <Button variant="outline" size="sm" className="mt-2" onClick={() => onOpen?.(product.id)}>
             상세 보기
@@ -151,119 +126,5 @@ function SortableProductCard({ product, onOpen }: { product: ProductDto; onOpen?
         </CardContent>
       </Card>
     </div>
-  );
-}
-
-function AddProductForm(props: { onSubmit: (data: ProductSaveDto) => void; onCancel: () => void }) {
-  const fileInputRef = useRef<HTMLInputElement | null>(null);
-  const [selectedFileName, setSelectedFileName] = useState<string>('');
-
-  return (
-    <form
-      className="mt-2 space-y-4"
-      onSubmit={(e) => {
-        e.preventDefault();
-        const data = Object.fromEntries(
-          new FormData(e.currentTarget as HTMLFormElement).entries(),
-        ) as unknown as ProductSaveDto;
-        props.onSubmit(data);
-      }}
-    >
-      <div className="space-y-2">
-        <Label htmlFor="name">제품명</Label>
-        <Input id="productNm" name="productNm" placeholder="예: 스냅 프리미엄" required />
-      </div>
-
-      <div className="space-y-2">
-        <Label htmlFor="price">가격</Label>
-        <Input id="price" name="price" type="number" min={0} placeholder="예: 12900" required />
-      </div>
-
-      <div className="space-y-2">
-        <Label htmlFor="price">진행시간</Label>
-        <Input id="durationHours" name="durationHours" type="number" min={0} placeholder="예: 5시간" required />
-      </div>
-
-      <div className="space-y-2">
-        <Label htmlFor="description">제품설명</Label>
-        <Textarea placeholder="예: 해당 제품은 작가 2명 보조 2명이 참여합니다." name="description" id="description" />
-      </div>
-
-      <div className="space-y-2">
-        <Label htmlFor="imageUrl">이미지 URL</Label>
-        <Input
-          ref={fileInputRef}
-          id="file"
-          name="file"
-          type="file"
-          accept="image/*"
-          className="hidden"
-          onChange={(e) => {
-            const f = e.target.files?.[0];
-            setSelectedFileName(f?.name || '');
-          }}
-        />
-        <div className="flex items-center gap-2">
-          <Button type="button" onClick={() => fileInputRef.current?.click()}>
-            업로드
-          </Button>
-          {selectedFileName && <span className="text-sm text-muted-foreground">{selectedFileName}</span>}
-        </div>
-      </div>
-
-      <div className="space-y-2">
-        <Label htmlFor="useYn">게시여부</Label>
-        <RadioGroup
-          defaultValue="Y"
-          className="flex gap-3"
-          name="postingYn"
-          onValueChange={(value) => console.log(value)}
-        >
-          <div className="flex items-center">
-            <RadioGroupItem value="Y" id="r1" />
-            <Label htmlFor="r1">게시</Label>
-          </div>
-          <div className="flex items-center">
-            <RadioGroupItem value="N" id="r2" />
-            <Label htmlFor="r2">미게시</Label>
-          </div>
-        </RadioGroup>
-      </div>
-
-      <div className="space-y-2">
-        <Label htmlFor="useYn">사용여부</Label>
-        <RadioGroup defaultValue="Y" className="flex gap-3" name="useYn" onValueChange={(value) => console.log(value)}>
-          <div className="flex items-center">
-            <RadioGroupItem value="Y" id="r1" />
-            <Label htmlFor="r1">사용</Label>
-          </div>
-          <div className="flex items-center">
-            <RadioGroupItem value="N" id="r2" />
-            <Label htmlFor="r2">미사용</Label>
-          </div>
-        </RadioGroup>
-      </div>
-
-      <div className="space-y-2">
-        <Label>배지</Label>
-        <Select name="badge">
-          <SelectTrigger>
-            <SelectValue placeholder="선택(옵션)" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="new">신규</SelectItem>
-            <SelectItem value="sale">세일</SelectItem>
-            <SelectItem value="recommend">추천</SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
-
-      <div className="flex justify-end gap-2 pt-2">
-        <Button type="button" variant="outline" onClick={props.onCancel}>
-          취소
-        </Button>
-        <Button type="submit">추가</Button>
-      </div>
-    </form>
   );
 }

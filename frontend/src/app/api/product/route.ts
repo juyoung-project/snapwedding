@@ -2,8 +2,8 @@ import { apiGet, apiPut, apiUpload } from '@/lib/commonApi';
 import { NextResponse } from 'next/server';
 
 export async function GET() {
+  // id가 없는 경우, 전체 목록 조회
   const response = await apiGet('/api/expert-products');
-  console.log(response);
   return NextResponse.json(response?.data);
 }
 

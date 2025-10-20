@@ -30,6 +30,23 @@ public class ExpertProductController {
         return ResponseEntity.ok(expertProductService.getList());
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<ExpertProductEntity> getProduct(@PathVariable Long id) {
+        return ResponseEntity.ok(expertProductService.getExpertProduct(id));
+    }
+
+    @PutMapping(path = "/{id}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    public void updateExpertProduct(@PathVariable Long id,
+                                    @RequestPart(required = false) MultipartFile file,
+                                    @RequestPart @Valid ExpertProductRequest expertProduct) {
+        expertProductService.updateExpertProduct(id, file, expertProduct);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteExpertProduct(@PathVariable Long id) {
+        expertProductService.deleteExpertProduct(id);
+    }
+
     @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<Boolean> createExpertProduct(
             @RequestPart ExpertProductRequest expertProduct,

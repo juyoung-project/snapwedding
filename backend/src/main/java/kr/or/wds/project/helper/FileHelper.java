@@ -74,14 +74,23 @@ public class FileHelper {
         return fileId;
     }
 
+    public FileMasterEntity getFileInfo(Long fileId) {
+        return fileMasterRepository.findById(fileId).orElseThrow(() -> new CustomException(ExceptionType.FILE_NOT_FOUND));
+    }
+
     public FileDownloadDto downloadFile(Long fileId) {
-        FileMasterEntity fileMasterEntity = fileMasterRepository.findById(fileId).orElseThrow(() -> new CustomException(ExceptionType.FILE_NOT_FOUND));
+        FileMasterEntity fileMasterEntity = this.getFileInfo(fileId);
         Resource resource = this.getResource(fileMasterEntity.getFilePath(), fileMasterEntity.getFileStoreNm());
         FileDownloadDto dto = new FileDownloadDto();
         dto.setFileNm(encodeFileName(fileMasterEntity.getFileNm()));
         dto.setResource(resource);
         dto.setMimeType(fileMasterEntity.getFileMimeType());
         return dto;
+    }
+
+    public void deleteFile(Long fileId) {
+        FileMasterEntity fileMasterEntity = this.getFileInfo(fileId);
+        fileMasterEntity.setDelYn("Y");
     }
 
     public String encodeFileName(String fileName) {

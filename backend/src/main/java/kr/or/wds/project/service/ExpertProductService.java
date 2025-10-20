@@ -25,6 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -47,14 +48,41 @@ public class ExpertProductService implements UploadAfterProcessor {
         this.fileHelper = fileHelper;
     }
 
+    public ExpertProductEntity getExpertProduct(Long id) {
+        return expertProductRepository.findById(id)
+                .orElseThrow(() -> new CustomException(ExceptionType.EXPERT_PRODUCT_NOT_FOUND));
+    }
+
     @Transactional
     public void createExpertProduct(ExpertProductRequest request, MultipartFile file) {
         ExpertProductEntity expertProduct = expertProductMapper.toEntity(request);
         expertProductRepository.save(expertProduct);
         List<MultipartFile> files = List.of(file);
         fileHelper.upload(FileUploadDomainType.PRODUCT, files, expertProduct.getId(), expertProduct.getExpertId());
-
     }
+
+
+    @Transactional
+    public void updateExpertProduct(Long id,MultipartFile file, ExpertProductRequest request) {
+        ExpertProductEntity product = this.getExpertProduct(id);
+        product.setProductNm(request.getProductNm());
+        product.setPrice(request.getPrice());
+        product.setDurationHours(request.getDurationHours());
+        product.setDescription(request.getDescription());
+
+        Optional.ofNullable(file).ifPresent(f -> {
+            List<MultipartFile> files = List.of(f);
+            fileHelper.upload(FileUploadDomainType.PRODUCT, files, product.getId(), product.getExpertId());
+        });
+    }
+
+    @Transactional
+    public void deleteExpertProduct(Long id) {
+        // 물리삭제는 진행하지 않음
+        ExpertProductEntity product = this.getExpertProduct(id);
+        product.setDelYn("Y");
+    }
+
 
     public ExpertProductDiscountEntity createExpertProductDiscount(ExpertProductDiscountRequest request) {
         ExpertProductDiscountEntity expertProductDiscount = expertProductMapper.toDiscountEntity(request);
@@ -62,13 +90,13 @@ public class ExpertProductService implements UploadAfterProcessor {
     }
 
     public List<ExpertProductResponse> getList() {
-        return ExpertProductResponse.from(expertProductRepository.findAllByOrderByOrderAsc());
+        return ExpertProductResponse.from(expertProductRepository.findAllByDelYnOrderByOrderAsc("N"));
     }
 
     public void updateOrder(List<ExpertProductOrderRequest> orders
     ) {
         List<Long> ids = orders.stream().map(ExpertProductOrderRequest::getId).toList();
-        List<ExpertProductEntity> entities = expertProductRepository.findAllById(ids);
+        List<ExpertProductEntity> products = expertProductRepository.findAllById(ids);
 
         Map<Long, Integer> orderMap = orders.stream()
                 .collect(Collectors.toMap(
@@ -76,14 +104,14 @@ public class ExpertProductService implements UploadAfterProcessor {
                         ExpertProductOrderRequest::getOrder
                 ));
 
-        entities.forEach(entity -> {
+        products.forEach(entity -> {
             Integer newOrder = orderMap.get(entity.getId());
             if (newOrder != null) {
                 entity.setOrder(newOrder);
             }
         });
 
-        expertProductRepository.saveAll(entities);
+        expertProductRepository.saveAll(products);
 
     }
 
@@ -98,6 +126,7 @@ public class ExpertProductService implements UploadAfterProcessor {
         ExpertProductEntity expertProduct = expertProductRepository.findById(context.aggregateId())
                 .orElseThrow(() -> new CustomException(ExceptionType.DATA_NOT_FOUND));
 
+        Optional.ofNullable(expertProduct.getThumbnailFileId()).ifPresent(fileHelper::deleteFile);
         expertProduct.setThumbnailFileId(context.fileIds().get(0));
         expertProductRepository.save(expertProduct);
         // save() 호출 또는 변경 감지(Dirty Checking)로 UPDATE 실행됨
