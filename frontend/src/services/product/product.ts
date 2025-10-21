@@ -16,8 +16,6 @@ export async function getProductById(id: number | string | null): Promise<AxiosR
 
 export async function updateProduct(id: string, payload: ProductSaveDto): Promise<AxiosResponse<ProductDto>> {
   const form = new FormData();
-  console.log('id   ', id);
-  console.log('payload   ', payload);
   payload['expertId'] = '1';
   payload['productType'] = 'SNAP';
   form.append('expertProduct', JSON.stringify(payload));

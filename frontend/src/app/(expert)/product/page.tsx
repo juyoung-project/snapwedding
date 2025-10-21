@@ -303,7 +303,7 @@ export default function ProductsPage() {
       />
 
       <Dialog open={isFormOpen} onOpenChange={(open) => !open && closeForm()}>
-        <DialogContent className="w-full sm:max-w-xl">
+        <DialogContent className="w-full sm:max-w-md md:max-w-xl lg:max-w-2xl">
           <DialogHeader>
             <DialogTitle>{editingProductId ? '제품 수정' : '새 제품 추가'}</DialogTitle>
           </DialogHeader>

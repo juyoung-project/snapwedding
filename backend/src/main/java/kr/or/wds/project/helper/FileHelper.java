@@ -88,6 +88,7 @@ public class FileHelper {
         return dto;
     }
 
+    @Transactional
     public void deleteFile(Long fileId) {
         FileMasterEntity fileMasterEntity = this.getFileInfo(fileId);
         fileMasterEntity.setDelYn("Y");
